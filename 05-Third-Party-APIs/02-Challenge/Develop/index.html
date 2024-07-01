@@ -30,8 +30,8 @@
 <div class="modal" id="myModal">
   <div class="modal-dialog">
     <div class="modal-content">
+      <h2 class="modal-title">add task</h2>
       <div class="modal-header">
-        <h2 class="modal-title">add task</h2>
         <div class="modal-body">
           <form action="">
             <label for="task-title">Task Title</label>
@@ -43,39 +43,43 @@
           </form>
         </div>
       </div>
+      <button class="btn btn-success" onclick="generateTaskId()" id="addBtn">Add Task</button>
     </div>
   </div>
 </div>
 
 
     <div class="row swim-lanes text-center justify-content-between">
+      
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">To Do</h2>
           </div>
           <div class="card-body bg-light">
-            <div id="todo-cards"></div>
+            <div id="todo-cards" draggable="true">Mow the lawn</div>
           </div>
         </div>
       </div>
+      
       <div class="col-12 col-lg-4 d-flex">
         <div id="in-progress" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">In Progress</h2>
           </div>
           <div class="card-body bg-light">
-            <div id="in-progress-cards"></div>
+            <div id="in-progress-cards" draggable="true"></div>
           </div>
         </div>
         </div>
+        
         <div class="col-12 col-lg-4 d-flex">
           <div id="done" class="card border-light mb-3 lane flex-grow-1">
             <div class="card-header bg-white">
               <h2 class="card-title mb-1">Done</h2>
             </div>
             <div class="card-body bg-light">
-              <div id="done-cards"></div>
+              <div id="done-cards" draggable="true">Not a damn thing</div>
           </div>
           </div>
       </div>

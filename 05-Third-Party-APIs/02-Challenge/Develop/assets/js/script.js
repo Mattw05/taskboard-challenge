@@ -2,13 +2,18 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
+let addTaskBtn = document.getElementById('addBtn');
+    addTaskBtn.addEventListener('click', createTaskCard({'TaskTitle': 'Clean', 'Date': '041886', 'Description': 'Clean the house'}))
+
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-
+    let uniqueID = new Date().getTime().toString();
 }
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
+
+    
 
 }
 
