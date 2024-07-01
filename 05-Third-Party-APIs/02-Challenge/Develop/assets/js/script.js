@@ -2,31 +2,37 @@
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
-let addTaskBtn = document.getElementById('addBtn');
-    addTaskBtn.addEventListener('click', createTaskCard({'TaskTitle': 'Clean', 'Date': '041886', 'Description': 'Clean the house'}))
-
-// get todo form
-const form = document.getElementById("to-do");
-
-//get to do input
-const taskInput = document.getElementById("task-name");
-const toDoCard = document.getElementById("todo-cards");
-
-//get to do lane
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
-    let uniqueID = new Date().getTime().toString();
+    return taskList.length > 0 ? Math.max(...taskList.map(task => task.id)) + 1 : 1;
 }
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
 
-    if(taskInput.value === ''){
-        alert('You must write something')
-    } else{
-        alert('add the card')
-    }
+    const taskCard = document.createElement("div");
+    taskCard.classList.add('task-card');
+    taskCard.setAttribute('data-task-id', task.id);
+    taskCard.draggable = true;
+    setColor(taskCard, task);
+    
+    taskCard.innerHTML = `
+    <div class="card mb-1">
+            <div class="card-header">${task.title}</div>
+            <div class="card-body">
+                <p class="card-text">${task.description}</p>
+                <p class="card-text">${task.dueDate}</p>
+            </div>
+        <button type="button" class="btn btn-danger delete-task-btn">Delete</button>
+    </div>
+    `;
+
+    document.getElementById('todo-cards').appendChild(taskCard);
+
+    return taskCard
+
+
 
 }
 
