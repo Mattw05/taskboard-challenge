@@ -5,6 +5,15 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 let addTaskBtn = document.getElementById('addBtn');
     addTaskBtn.addEventListener('click', createTaskCard({'TaskTitle': 'Clean', 'Date': '041886', 'Description': 'Clean the house'}))
 
+// get todo form
+const form = document.getElementById("to-do");
+
+//get to do input
+const taskInput = document.getElementById("task-name");
+const toDoCard = document.getElementById("todo-cards");
+
+//get to do lane
+
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
     let uniqueID = new Date().getTime().toString();
@@ -13,7 +22,11 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
 
-    
+    if(taskInput.value === ''){
+        alert('You must write something')
+    } else{
+        alert('add the card')
+    }
 
 }
 
