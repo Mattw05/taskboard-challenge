@@ -129,8 +129,26 @@ function handleAddTask(event){
 console.log(taskList);
 
 // Todo: create a function to handle deleting a task
-function handleDeleteTask(event) {}
+function handleDeleteTask(event){
+  // Retrieve the task ID of the task to be deleted
+  const taskId = $(this).closest('.task-card').attr('data-task-id');
+  
+  // Find the index of the task with the matching ID in the taskList array
+  const index = taskList.findIndex(task => task.id === parseInt(taskId));
+  
+  // Check if the task exists
+  if (index !== -1) {
 
+      // Remove the task from taskList
+      taskList.splice(index, 1);
+
+      // Update localStorage
+      localStorage.setItem('tasks', JSON.stringify(taskList));
+
+      // Render taskList
+      renderTaskList();
+  }
+}
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {}
 
