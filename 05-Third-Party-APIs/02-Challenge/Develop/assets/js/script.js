@@ -12,7 +12,7 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
   const taskCard = document.createElement("div");
-  taskCard.classList.add('task-card');
+  taskCard.classList.add("task-card");
   taskCard.setAttribute("data-task-id", task.id);
   taskCard.draggable = true;
   setColor(taskCard, task);
@@ -40,93 +40,90 @@ function setColor(taskCard, task) {
   const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
   // Change colors based on due date
-  if (task.status === 'done') {
-      taskCard.style.backgroundColor = '#FAFFFD';
-      
-  // Overdue
+  if (task.status === "done") {
+    taskCard.style.backgroundColor = "#FAFFFD";
+
+    // Overdue
   } else if (daysDiff < 0) {
-      taskCard.style.backgroundColor = 'red'; 
+    taskCard.style.backgroundColor = "red";
 
-  // close to deadline
+    // close to deadline
   } else if (daysDiff <= 3) {
-      taskCard.style.backgroundColor = 'yellow';
+    taskCard.style.backgroundColor = "yellow";
 
-  // else white
+    // else white
   } else {
-      taskCard.style.backgroundColor = 'white'; 
+    taskCard.style.backgroundColor = "white";
   }
 }
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-
   // Clear existing task cards
-  document.querySelectorAll('.task-card').forEach(card => card.remove());
+  document.querySelectorAll(".task-card").forEach((card) => card.remove());
 
-  // Render task cards 
-  taskList.forEach(task => {
+  // Render task cards
+  taskList.forEach((task) => {
+    // Get the swim lane container based on the task status
+    let taskColumn;
+    if (task.status === "to-do") {
+      taskColumn = document.getElementById("to-do");
+    } else if (task.status === "in-progress") {
+      taskColumn = document.getElementById("in-progress");
+    } else if (task.status === "done") {
+      taskColumn = document.getElementById("done");
+    }
 
-      // Get the swim lane container based on the task status
-      let taskColumn;
-      if (task.status === 'to-do') {
-          taskColumn = document.getElementById('to-do');
-      } else if (task.status === 'in-progress') {
-          taskColumn = document.getElementById('in-progress');
-      } else if (task.status === 'done') {
-          taskColumn = document.getElementById('done');
-      }
+    if (taskColumn) {
+      // Create the task card
+      const taskCard = createTaskCard(task);
 
-      if (taskColumn) {
-
-          // Create the task card
-          const taskCard = createTaskCard(task);
-
-          // Append the task card to the columns
-          taskColumn.querySelector('.card-body').appendChild(
-taskCard);
-      } else {
-          console.error(`Swim lane container for status '${task.status}' not found.`);
-      }
+      // Append the task card to the columns
+      taskColumn.querySelector(".card-body").appendChild(taskCard);
+    } else {
+      console.error(
+        `Swim lane container for status '${task.status}' not found.`
+      );
+    }
   });
 
   // Make task cards draggable
-  $('.task-card').draggable({
-      revert: 'invalid',
-      helper: 'clone',
+  $(".task-card").draggable({
+    revert: "invalid",
+    helper: "clone",
   });
 }
 
 // Todo: create a function to handle adding a new task
-function handleAddTask(event) {
-  // Prevent derfault behavior
-  event.preventDefualt();
+function handleAddTask(event){
+  // Prevent the default behavior
+  event.preventDefault();
 
-  // Get form inputs
+  // Get inputs
   const title = document.getElementById('task-title').value;
-  const dueDate = document.getElementById('task-due-date').value;
   const description = document.getElementById('task-description').value;
+  const dueDate = document.getElementById('task-due-date').value;
 
-  console.log(title)
-
-  // Create a mew tasl object
+  // Create a new task object with the inputs
   const newTask = {
-    id: generateTaskId(), // generates a unique id
-    title: title,
-    dueDate: dueDate,
-    description: description,
-    status: "to-do", // sets the initial value
+      id: generateTaskId(), // Generate a unique task ID
+      title: title,
+      description: description,
+      dueDate: dueDate,
+      status: 'to-do', // Set initially as todo 
   };
 
-  // Add new task to the taskList array
+  // Add the new task to the taskList array
   taskList.push(newTask);
 
-  // Update local storage
-  localStorage.setItem("tasks", JSON.stringify(taskList));
+  // Update task in localStorage
+  localStorage.setItem('tasks', JSON.stringify(taskList));
+
 
   renderTaskList();
 
-  // Hide from after rendering task
-  $(`#formModal`).modal("hide");
+  // Hide the modal after adding the task
+  $('#formModal').modal('hide');
 }
 
 console.log(taskList);
@@ -139,27 +136,26 @@ function handleDrop(event, ui) {}
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
-   
-    // Load task list from localStorage or empty array 
-    taskList = JSON.parse(localStorage.getItem("tasks")) || [];
-   
-    // Render the task list 
-    renderTaskList();
+  // Load task list from localStorage or empty array
+  taskList = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    // Add event listener for submitting the task form
-    $('#task-form').submit(handleAddTask);
+  // Render the task list
+  renderTaskList();
 
-    // Add event listener for deleting a task
-    $(document).on('click', '.delete-task-btn', handleDeleteTask);
+  // Add event listener for submitting the task form
+  $("#task-form").submit(handleAddTask);
 
-    // Make the swim lanes droppable 
-    $('.lane').droppable({
-        accept: '.task-card',
-        drop: handleDrop
-    });
+  // Add event listener for deleting a task
+  $(document).on("click", ".delete-task-btn", handleDeleteTask);
 
-    // Initialize date picker for the task due date field
-    $('#task-due-date').datepicker({
-        dateFormat: 'yy-mm-dd' // Set the date format
-    });
+  // Make the swim lanes droppable
+  $(".lane").droppable({
+    accept: ".task-card",
+    drop: handleDrop,
+  });
+
+  // Initialize date picker for the task due date field
+  $("#task-due-date").datepicker({
+    dateFormat: "yy-mm-dd", // Set the date format
+  });
 });
