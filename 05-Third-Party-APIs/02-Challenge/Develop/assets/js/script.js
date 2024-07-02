@@ -12,10 +12,10 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
   const taskCard = document.createElement("div");
-  taskCard.classList.add("task-card");
+  taskCard.classList.add('task-card');
   taskCard.setAttribute("data-task-id", task.id);
   taskCard.draggable = true;
-  setColor(taskCard, task);
+//   setColor(taskCard, task);
 
   taskCard.innerHTML = `
     <div class="card mb-1">
@@ -32,6 +32,8 @@ function createTaskCard(task) {
 
   return taskCard;
 }
+
+console.log(task)
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
@@ -66,9 +68,11 @@ function handleAddTask(event) {
   event.preventDefualt();
 
   // Get form inputs
-  const title = document.getElementById("task-title").value;
-  const dueDate = document.getElementById("task-due-date").value;
-  const description = document.getElementById("task-description").value;
+  const title = document.getElementById('task-title').value;
+  const dueDate = document.getElementById('task-due-date').value;
+  const description = document.getElementById('task-description').value;
+
+  console.log(title)
 
   // Create a mew tasl object
   const newTask = {
@@ -100,4 +104,28 @@ function handleDeleteTask(event) {}
 function handleDrop(event, ui) {}
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
-$(document).ready(function () {});
+$(document).ready(function () {
+   
+    // Load task list from localStorage or empty array 
+    taskList = JSON.parse(localStorage.getItem("tasks")) || [];
+   
+    // Render the task list 
+    renderTaskList();
+
+    // Add event listener for submitting the task form
+    $('#task-form').submit(handleAddTask);
+
+    // Add event listener for deleting a task
+    $(document).on('click', '.delete-task-btn', handleDeleteTask);
+
+    // Make the swim lanes droppable 
+    $('.lane').droppable({
+        accept: '.task-card',
+        drop: handleDrop
+    });
+
+    // Initialize date picker for the task due date field
+    $('#task-due-date').datepicker({
+        dateFormat: 'yy-mm-dd' // Set the date format
+    });
+});
