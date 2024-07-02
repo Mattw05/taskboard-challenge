@@ -12,27 +12,27 @@ function generateTaskId() {
 // Todo: create a function to create a task card
 function createTaskCard(task) {
   const taskCard = document.createElement("div");
-  taskCard.classList.add("task-card");
-  taskCard.setAttribute("data-task-id", task.id);
+  taskCard.classList.add('task-card');
+  taskCard.setAttribute('data-task-id', task.id);
   taskCard.draggable = true;
   setColor(taskCard, task);
 
   taskCard.innerHTML = `
-    <div class="card mb-1">
-        <div class="card-header">${task.title}</div>
-        <div class="card-body">
-            <p class="card-text">${task.description}</p>
-            <p class="card-text">${task.dueDate}</p>
-            <button type="button" class="btn btn-danger delete-task-btn">Delete</button>
-        </div>
-    </div>
-`;
+      <div class="card mb-1">
+          <div class="card-header">${task.title}</div>
+          <div class="card-body">
+              <p class="card-text">${task.description}</p>
+              <p class="card-text">${task.dueDate}</p>
+              <button type="button" class="btn btn-danger delete-task-btn">Delete</button>
+          </div>
+      </div>
+  `;
 
-  document.getElementById("todo-cards").appendChild(taskCard);
+  // Append the task card to the container with the ID "todo-cards"
+  document.getElementById('todo-cards').appendChild(taskCard);
 
   return taskCard;
 }
-
 function setColor(taskCard, task) {
   const dueDate = new Date(task.dueDate);
   const today = new Date();
@@ -45,7 +45,7 @@ function setColor(taskCard, task) {
 
     // Overdue
   } else if (daysDiff < 0) {
-    taskCard.style.backgroundColor = "red";
+    taskCard.style.backgroundColor = "#DF2935";
 
     // close to deadline
   } else if (daysDiff <= 3) {
@@ -150,7 +150,41 @@ function handleDeleteTask(event){
   }
 }
 // Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {}
+function handleDrop(event, ui) {
+
+  // Retrieve the task ID of the dropped task
+  const taskId = ui.draggable.attr('data-task-id');
+  
+  // Retrieve the ID of the new status lane where the task is dropped
+  const newStatus = $(this).attr('id');
+  
+  // Find the index of the dropped task in the taskList array
+  const taskIndex = taskList.findIndex(task => task.id === parseInt(taskId));
+
+  // Log the task drop details
+  console.log('Task dropped:', taskId, newStatus);
+
+  // Check if the dropped task exists in the taskList
+  if (taskIndex !== -1) {
+
+      // Change the status of the dropped task to the new status lane
+      taskList[taskIndex].status = newStatus;
+
+      // Update the background color of the task card based on its status
+      if (newStatus === 'done') {
+          ui.draggable.find('.card').css('background-color', 'white');
+      } else {
+          // Set color based on due date if status is not "done"
+          setColorBasedOnDueDate(ui.draggable.find('.card').get(0), taskList[taskIndex]);
+      }
+
+      // Update the tasks data stored in localStorage
+      localStorage.setItem('tasks', JSON.stringify(taskList));
+
+      // Render the updated task list
+      renderTaskList();
+  }
+}
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
