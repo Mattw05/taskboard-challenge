@@ -33,7 +33,7 @@ function createTaskCard(task) {
   return taskCard;
 }
 
-function setColorBasedOnDueDate(taskCard, task) {
+function setColor(taskCard, task) {
   const dueDate = new Date(task.dueDate);
   const today = new Date();
   const timeDiff = dueDate.getTime() - today.getTime();
@@ -59,29 +59,41 @@ function setColorBasedOnDueDate(taskCard, task) {
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-  // Clear the exisiting cards
-  document.querySelectorAll("task-card").forEach((card) => remove());
 
-  // Rener task cards
-  let taskCol;
-  if (task.status === "to-do") {
-    taskCol = document.getElementById("to-do");
-  } else if (task.status === "in-progress") {
-    taskCol = document.getElementById("in-progress");
-  } else if (task.status === "done") {
-    taskCol = document.getElementById("done");
-  }
+  // Clear existing task cards
+  document.querySelectorAll('.task-card').forEach(card => card.remove());
 
-  // check if swim lane container exists
-  if (taskCol) {
-    // Create task card
-    const taskCard = createTaskCard(task);
+  // Render task cards 
+  taskList.forEach(task => {
 
-    // Append
-    taskCol.querySelector(".card-body").appendChild(taskCard);
-  } else {
-    console.log("no task found ");
-  }
+      // Get the swim lane container based on the task status
+      let taskColumn;
+      if (task.status === 'to-do') {
+          taskColumn = document.getElementById('to-do');
+      } else if (task.status === 'in-progress') {
+          taskColumn = document.getElementById('in-progress');
+      } else if (task.status === 'done') {
+          taskColumn = document.getElementById('done');
+      }
+
+      if (taskColumn) {
+
+          // Create the task card
+          const taskCard = createTaskCard(task);
+
+          // Append the task card to the columns
+          taskColumn.querySelector('.card-body').appendChild(
+taskCard);
+      } else {
+          console.error(`Swim lane container for status '${task.status}' not found.`);
+      }
+  });
+
+  // Make task cards draggable
+  $('.task-card').draggable({
+      revert: 'invalid',
+      helper: 'clone',
+  });
 }
 
 // Todo: create a function to handle adding a new task
