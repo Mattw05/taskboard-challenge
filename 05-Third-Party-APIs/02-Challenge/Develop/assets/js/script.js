@@ -15,7 +15,7 @@ function createTaskCard(task) {
   taskCard.classList.add('task-card');
   taskCard.setAttribute('data-task-id', task.id);
   taskCard.draggable = true;
-  setColor(taskCard, task);
+  setColorBasedOnDueDate(taskCard, task);
 
   taskCard.innerHTML = `
       <div class="card mb-1">
@@ -33,30 +33,29 @@ function createTaskCard(task) {
 
   return taskCard;
 }
-function setColor(taskCard, task) {
+function setColorBasedOnDueDate(taskCard, task) {
   const dueDate = new Date(task.dueDate);
   const today = new Date();
   const timeDiff = dueDate.getTime() - today.getTime();
   const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-  // Change colors based on due date
-  if (task.status === "done") {
-    taskCard.style.backgroundColor = "#FAFFFD";
-
-    // Overdue
+  // Set background color to white if status is "done"
+  if (task.status === 'done') {
+      taskCard.style.backgroundColor = '#FAFFFD';
+      
+  // Set background color to red if task is overdue
   } else if (daysDiff < 0) {
-    taskCard.style.backgroundColor = "#DF2935";
+      taskCard.style.backgroundColor = '#DF2935'; 
 
-    // close to deadline
+  // Set background color to yellow if task is nearing the deadline
   } else if (daysDiff <= 3) {
-    taskCard.style.backgroundColor = "yellow";
+      taskCard.style.backgroundColor = '#F6F740';
 
-    // else white
+  // Set background color to white if task is not overdue and has more than 3 days until the deadline
   } else {
-    taskCard.style.backgroundColor = "white";
+      taskCard.style.backgroundColor = '#FAFFFD'; 
   }
 }
-
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
   // Clear existing task cards
